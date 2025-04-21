@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Extensions Manager</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="Logo" />
+        <span>Extensions</span>
+      </div>
+      <div class="settings">
+        <i class="gear-icon">⚙</i>
+      </div>
+    </header>
+
+    <main>
+      <div class="main-header">
+        <h1>Extensions List</h1>
+        <div class="filter-buttons">
+          <button class="filter active">All</button>
+          <button class="filter">Active</button>
+          <button class="filter">Inactive</button>
+        </div>
+      </div>
+      <div class="card-grid"></div>
+    </main>
+  </div>
+
+  <script>
+    const cardGrid = document.querySelector('.card-grid');
+
+    const extensions = [
+      { name: "DevLens", desc: "Inspect layouts and element boundaries visually.", icon: "🧭", active: true },
+      { name: "StyleSpy", desc: "Analyze and copy CSS from webpage elements.", icon: "🧪", active: true },
+      { name: "SpeedBoost", desc: "Accelerate loading by optimizing resources.", icon: "⚡", active: false },
+      { name: "JSONWizard", desc: "Prettify and validate JSON easily.", icon: "🧾", active: true },
+      { name: "TabMaster Pro", desc: "Group and manage browser tabs.", icon: "🗂", active: true },
+      { name: "ViewportBuddy", desc: "Simulate screen resolutions.", icon: "📱", active: false },
+      { name: "Markup Notes", desc: "Write notes directly on web pages.", icon: "📝", active: true },
+      { name: "GridGuides", desc: "Overlay layout guides.", icon: "🔳", active: false },
+      { name: "Palette Picker", desc: "Copy color palettes from pages.", icon: "🎨", active: true },
+      { name: "LinkChecker", desc: "Highlight broken links easily.", icon: "🔗", active: true },
+      { name: "DOM Snapshot", desc: "Capture DOM structure quickly.", icon: "📸", active: false },
+      { name: "ConsolePlus", desc: "Enhance console with tools.", icon: "💻", active: true }
+    ];
+
+    function renderCards(filter = "All") {
+      cardGrid.innerHTML = "";
+      const filtered = extensions.filter(ext => {
+        if (filter === "All") return true;
+        if (filter === "Active") return ext.active;
+        if (filter === "Inactive") return !ext.active;
+      });
+
+      filtered.forEach(ext => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="icon">${ext.icon}</div>
+            <div class="card-info">
+              <h2>${ext.name}</h2>
+              <p>${ext.desc}</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button>Remove</button>
+            <label class="switch">
+              <input type="checkbox" ${ext.active ? "checked" : ""}>
+              <span class="slider"></span>
+            </label>
+          </div>
+        `;
+        cardGrid.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        renderCards(button.textContent.trim());
+      });
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
